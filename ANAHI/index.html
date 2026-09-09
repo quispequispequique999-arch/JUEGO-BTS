@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BTS World: Mario Edition Easy 💜</title>
+  <!-- Motor Phaser 3 -->
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- PANTALLA DE PERSONALIZACIÓN -->
+  <div id="avatar-panel" class="custom-panel">
+    <h2>✨ Personaliza tu Outfit ✨</h2>
+    <p>Elige tu estilo Army antes de comenzar a explorar:</p>
+    
+    <div style="margin: 15px 0;">
+      <button class="outfit-btn selected" onclick="selectOutfit('#8A2BE2', this)">Morado Army 💜</button>
+      <button class="outfit-btn" onclick="selectOutfit('#FF69B4', this)">Rosa Neón 💖</button>
+      <button class="outfit-btn" onclick="selectOutfit('#FFD700', this)">Dorado Dynamite ✨</button>
+    </div>
+
+    <br>
+    <button id="start-btn" onclick="startGame()">¡Iniciar Aventura!</button>
+  </div>
+
+  <!-- CONTENEDOR DEL JUEGO -->
+  <div id="game-container">
+    <button id="surprise-btn" class="hidden" onclick="triggerSurprise()">🎁 ¡VER LA SORPRESA FINAL! 🎁</button>
+  </div>
+
+  <!-- JUKEBOX DE MÚSICA -->
+  <div class="music-player">
+    <span>🎵 <b>BTS Jukebox:</b></span>
+    <select id="song-select" onchange="changeSong(this.value)">
+      <option value="BTS - Blood Sweat & Tears.mp3 ">1. BTS - Blood Sweat & Tears🧨</option>
+      <option value="BTS - Fake Love.mp3">2. BTS - Fake Love 🧈</option>
+      <option value="BTS - Pied Pier.mp3">3. BTS - Pied Pier 💗</option>
+      <option value="BTS - Please.mp3">4. BTS - Please 🌸</option>
+      <option value="Jimin - Like Crazy.mp3">5. Jimin - Like Crazy 🎶</option>
+      <option value="Jin - Heart on The Windows.mp3">6. Jin - Heart on The Windows 🎤</option>
+      <option value="JungKook - Yes or No.mp3">7. Jungkook - Sorpresa🐰💜</option>
+    </select>
+  </div>
+
+  <audio id="bg-music" loop></audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
