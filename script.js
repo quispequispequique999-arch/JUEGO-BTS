@@ -26,6 +26,10 @@ const config = {
   width: 800,
   height: 500,
   parent: 'game-container',
+  scale: {
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH
+  },
   physics: {
     default: 'arcade',
     arcade: { 
@@ -50,7 +54,7 @@ function startGame() {
   document.getElementById('avatar-panel').classList.add('hidden');
   gameStarted = true;
   
-  // Iniciar la canción que esté seleccionada
+  // Iniciar la canción seleccionada
   const select = document.getElementById('song-select');
   if (select) changeSong(select.value);
 
@@ -62,6 +66,22 @@ function changeSong(src) {
   if (audio && src) {
     audio.src = src;
     audio.play().catch(err => console.log("Aviso de reproducción:", err));
+  }
+}
+
+function toggleFullscreen() {
+  if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+    if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen();
+    } else if (document.documentElement.webkitRequestFullscreen) {
+      document.documentElement.webkitRequestFullscreen();
+    }
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    }
   }
 }
 
@@ -165,11 +185,24 @@ function create() {
     }, null, this);
   });
 
-  msgText = this.add.text(40, 420, 'Usa las flechas del teclado o los botones táctiles 📱🎮', { 
-    font: '12px Arial', fill: '#E6E6FA', backgroundColor: '#1A002C', padding: { x: 10, y: 5 }
+  // GLOBO / CAJA DE MENSAJES VISIBLE
+  msgText = this.add.text(30, 430, 'Usa las flechas del teclado o los botones táctiles 📱🎮', { 
+    font: '13px Arial', 
+    fill: '#FFD700', 
+    backgroundColor: '#1A002C', 
+    padding: { x: 12, y: 6 },
+    wordWrap: { width: 740 }
   });
+  msgText.setDepth(10);
 
-  scoreText = this.add.text(20, 15, 'Integrantes saludados: 0 / 7', { font: '13px Arial', fill: '#FFD700' });
+  scoreText = this.add.text(20, 15, 'Integrantes saludados: 0 / 7', { 
+    font: '13px Arial', 
+    fill: '#FFD700',
+    backgroundColor: '#3B0066',
+    padding: { x: 8, y: 4 }
+  });
+  scoreText.setDepth(10);
+
   cursors = this.input.keyboard.createCursorKeys();
 }
 

@@ -22,9 +22,9 @@
     <button class="start-btn" onclick="startGame()">¡EMPEZAR A JUGAR!</button>
   </div>
 
-  <!-- BARRA PERMANENTE PARA CAMBIAR DE MÚSICA -->
+  <!-- BARRA PERMANENTE PARA CAMBIAR DE MÚSICA Y PANTALLA COMPLETA -->
   <div id="music-player-bar" class="music-player-bar">
-    <label for="song-select">🎵 Reproductor de Música BTS: </label>
+    <label for="song-select">🎵 Reproductor BTS: </label>
     <select id="song-select" onchange="changeSong(this.value)">
       <option value="BTS - Blood Sweat & Tears.mp3">🎵 Blood Sweat & Tears</option>
       <option value="BTS - Fake Love.mp3">🎵 Fake Love</option>
@@ -34,6 +34,7 @@
       <option value="Jin - Heart on The Window.mp3">🎵 Jin - Heart on The Window</option>
       <option value="JungKook - Yes or No.mp3">🎵 JungKook - Yes or No</option>
     </select>
+    <button id="fullscreen-btn" onclick="toggleFullscreen()">⛶ Pantalla Completa</button>
   </div>
 
   <!-- Contenedor del Juego -->
