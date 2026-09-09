@@ -6,7 +6,11 @@ let npcGroup = [];
 let isSurpriseActive = false;
 let gameStarted = false;
 
-// Posiciones de los chicos
+// Estado para botones del celular
+let moveLeft = false;
+let moveRight = false;
+let moveJump = false;
+
 const btsMembers = [
   { name: "RM 👑", color: 0x4169E1, x: 80, y: 400, msg: "RM: '¡Gracias por acompañarnos! ¡Feliz Cumpleaños! 💜'" },
   { name: "Jin 🐹", color: 0xFF1493, x: 220, y: 260, msg: "Jin: '¡Worldwide Handsome te desea el mejor día!'" },
@@ -22,6 +26,10 @@ const config = {
   width: 800,
   height: 500,
   parent: 'game-container',
+  scale: {
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH
+  },
   physics: {
     default: 'arcade',
     arcade: { 
@@ -43,34 +51,72 @@ function selectOutfit(hexColor, btnElement) {
 }
 
 function startGame() {
-  const panel = document.getElementById('avatar-panel');
-  if (panel) panel.classList.add('hidden');
+  document.getElementById('avatar-panel').classList.add('hidden');
   gameStarted = true;
+  
+  // Iniciar la canción seleccionada
   const select = document.getElementById('song-select');
   if (select) changeSong(select.value);
+
+  setupTouchControls();
 }
 
 function changeSong(src) {
   const audio = document.getElementById('bg-music');
   if (audio && src) {
     audio.src = src;
-    audio.play().catch(err => console.log("Aviso de audio:", err));
+    audio.play().catch(err => console.log("Aviso de reproducción:", err));
   }
 }
 
-// ----------------------------------------------------
-// 1. PRELOAD CORREGIDO (Directo a la imagen jungkook.jpg)
-// ----------------------------------------------------
+function toggleFullscreen() {
+  if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+    if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen();
+    } else if (document.documentElement.webkitRequestFullscreen) {
+      document.documentElement.webkitRequestFullscreen();
+    }
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    }
+  }
+}
+
+function setupTouchControls() {
+  const btnLeft = document.getElementById('btn-left');
+  const btnRight = document.getElementById('btn-right');
+  const btnJump = document.getElementById('btn-jump');
+
+  if (btnLeft) {
+    btnLeft.addEventListener('touchstart', (e) => { e.preventDefault(); moveLeft = true; });
+    btnLeft.addEventListener('touchend', (e) => { e.preventDefault(); moveLeft = false; });
+    btnLeft.addEventListener('mousedown', () => moveLeft = true);
+    btnLeft.addEventListener('mouseup', () => moveLeft = false);
+  }
+
+  if (btnRight) {
+    btnRight.addEventListener('touchstart', (e) => { e.preventDefault(); moveRight = true; });
+    btnRight.addEventListener('touchend', (e) => { e.preventDefault(); moveRight = false; });
+    btnRight.addEventListener('mousedown', () => moveRight = true);
+    btnRight.addEventListener('mouseup', () => moveRight = false);
+  }
+
+  if (btnJump) {
+    btnJump.addEventListener('touchstart', (e) => { e.preventDefault(); moveJump = true; });
+    btnJump.addEventListener('touchend', (e) => { e.preventDefault(); moveJump = false; });
+    btnJump.addEventListener('mousedown', () => moveJump = true);
+    btnJump.addEventListener('mouseup', () => moveJump = false);
+  }
+}
+
 function preload() {
   this.load.spritesheet('playerSprite', 'assets/player.png', { frameWidth: 32, frameHeight: 48 });
-  
-  // Como jungkook.jpg está al lado de script.js e index.html:
   this.load.image('jungkookImg', 'jungkook.jpg');
 }
 
-// ----------------------------------------------------
-// 2. CREATE CON LA IMAGEN APLICADA A JUNGKOOK
-// ----------------------------------------------------
 function create() {
   this.add.rectangle(400, 250, 800, 500, 0x0d001a);
   this.add.text(220, 15, '💜 SALTA Y ENCUENTRA A LOS 7 INTEGRANTES 💜', { font: '16px Arial', fill: '#FFD700', fontWeight: 'bold' });
@@ -87,7 +133,6 @@ function create() {
   platforms.add(p2);
   platforms.add(p3);
 
-  // Jugador
   if (this.textures.exists('playerSprite')) {
     player = this.physics.add.sprite(50, 400, 'playerSprite');
   } else {
@@ -107,17 +152,13 @@ function create() {
     });
   }
 
-  // BTS NPCS
   btsMembers.forEach((member) => {
     let npc;
-
-    // Si es Jungkook, dibujamos la foto jungkook.jpg
     if (member.name.includes("Jungkook")) {
       npc = this.add.image(member.x, member.y, 'jungkookImg');
-      npc.setDisplaySize(38, 50); // Mantiene el tamaño adecuado en el mapa
+      npc.setDisplaySize(38, 50);
       this.physics.add.existing(npc);
     } else {
-      // Los demás continúan con rectángulos
       npc = this.add.rectangle(member.x, member.y, 32, 45, member.color);
       this.physics.add.existing(npc);
     }
@@ -137,32 +178,48 @@ function create() {
         membersFound++;
         scoreText.setText(`Integrantes saludados: ${membersFound} / 7`);
         if (membersFound === 7) {
-          const btn = document.getElementById('surprise-btn');
-          if (btn) btn.classList.remove('hidden');
+          document.getElementById('surprise-btn').classList.remove('hidden');
         }
       }
       if (msgText) msgText.setText(npcData.msg);
     }, null, this);
   });
 
-  msgText = this.add.text(40, 420, 'Controles: Flechas IZQ / DER para Correr | FLECHA ARRIBA para Saltar 🪂', { 
-    font: '12px Arial', fill: '#E6E6FA', backgroundColor: '#1A002C', padding: { x: 10, y: 5 }
+  // GLOBO / CAJA DE MENSAJES VISIBLE
+  msgText = this.add.text(30, 430, 'Usa las flechas del teclado o los botones táctiles 📱🎮', { 
+    font: '13px Arial', 
+    fill: '#FFD700', 
+    backgroundColor: '#1A002C', 
+    padding: { x: 12, y: 6 },
+    wordWrap: { width: 740 }
   });
+  msgText.setDepth(10);
 
-  scoreText = this.add.text(20, 15, 'Integrantes saludados: 0 / 7', { font: '13px Arial', fill: '#FFD700' });
+  scoreText = this.add.text(20, 15, 'Integrantes saludados: 0 / 7', { 
+    font: '13px Arial', 
+    fill: '#FFD700',
+    backgroundColor: '#3B0066',
+    padding: { x: 8, y: 4 }
+  });
+  scoreText.setDepth(10);
+
   cursors = this.input.keyboard.createCursorKeys();
 }
 
 function update() {
-  if (!gameStarted || !cursors || !player || !player.body) return;
+  if (!gameStarted || !player || !player.body) return;
 
-  if (cursors.left.isDown) {
+  const isLeft = cursors.left.isDown || moveLeft;
+  const isRight = cursors.right.isDown || moveRight;
+  const isJump = cursors.up.isDown || moveJump;
+
+  if (isLeft) {
     player.body.setVelocityX(-200);
     if (player.anims && this.textures.exists('playerSprite')) {
       player.anims.play('walk', true);
       player.flipX = true;
     }
-  } else if (cursors.right.isDown) {
+  } else if (isRight) {
     player.body.setVelocityX(200);
     if (player.anims && this.textures.exists('playerSprite')) {
       player.anims.play('walk', true);
@@ -173,43 +230,21 @@ function update() {
     if (player.anims && this.textures.exists('playerSprite')) player.anims.stop();
   }
 
-  if (cursors.up.isDown && player.body.touching.down) {
+  if (isJump && player.body.touching.down) {
     player.body.setVelocityY(-460);
+    moveJump = false;
   }
 }
 
 function triggerSurprise() {
   isSurpriseActive = true;
-  const btn = document.getElementById('surprise-btn');
-  if (btn) btn.classList.add('hidden');
-
-  const gameContainer = document.getElementById('game-container');
-  const overlay = document.createElement('div');
-  overlay.className = 'birthday-overlay';
-  overlay.innerHTML = `
-    <h1 class="birthday-title">✨ ¡FELIZ CUMPLEAÑOS! ✨</h1>
-    <div class="birthday-cake">🎂🎉🎈</div>
-  `;
-  gameContainer.appendChild(overlay);
-
-  const balloonEmojis = ['🎈', '💜', '✨', '🎉', '🌸'];
-  for (let i = 0; i < 20; i++) {
-    setTimeout(() => {
-      const balloon = document.createElement('div');
-      balloon.className = 'balloon';
-      balloon.innerText = balloonEmojis[Math.floor(Math.random() * balloonEmojis.length)];
-      balloon.style.left = Math.random() * 85 + '%';
-      balloon.style.animationDuration = (3 + Math.random() * 2) + 's';
-      gameContainer.appendChild(balloon);
-      setTimeout(() => balloon.remove(), 5000);
-    }, i * 200);
-  }
+  document.getElementById('surprise-btn').classList.add('hidden');
 
   if (msgText) msgText.setText("💜 BTS Y JUNGKOOK CANTANDO EN VIVO - ¡FELIZ CUMPLEAÑOS! 🎤🎉");
 
   const select = document.getElementById('song-select');
   if (select) {
-    select.value = "audio/7-jungkook-special.mp3";
+    select.value = "JungKook - Yes or No.mp3";
     changeSong(select.value);
   }
 }

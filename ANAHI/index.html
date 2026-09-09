@@ -3,45 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BTS World: Mario Edition Easy 💜</title>
-  <!-- Motor Phaser 3 -->
-  <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+  <title>Juego BTS - Especial Cumpleaños</title>
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
 </head>
 <body>
 
-  <!-- PANTALLA DE PERSONALIZACIÓN -->
-  <div id="avatar-panel" class="custom-panel">
-    <h2>✨ Personaliza tu Outfit ✨</h2>
-    <p>Elige tu estilo Army antes de comenzar a explorar:</p>
-    
-    <div style="margin: 15px 0;">
-      <button class="outfit-btn selected" onclick="selectOutfit('#8A2BE2', this)">Morado Army 💜</button>
-      <button class="outfit-btn" onclick="selectOutfit('#FF69B4', this)">Rosa Neón 💖</button>
-      <button class="outfit-btn" onclick="selectOutfit('#FFD700', this)">Dorado Dynamite ✨</button>
+  <!-- Panel de inicio / Outfit -->
+  <div id="avatar-panel" class="avatar-panel">
+    <h2>🎉 ¡Bienvenida al Especial BTS! 🎉</h2>
+    <p>Selecciona tu outfit favorito:</p>
+    <div class="outfit-buttons">
+      <button class="outfit-btn selected" style="background-color: #8A2BE2;" onclick="selectOutfit('#8A2BE2', this)">Púrpura 💜</button>
+      <button class="outfit-btn" style="background-color: #FF69B4;" onclick="selectOutfit('#FF69B4', this)">Rosado 🌸</button>
+      <button class="outfit-btn" style="background-color: #1E90FF;" onclick="selectOutfit('#1E90FF', this)">Azul 💙</button>
     </div>
 
-    <br>
-    <button id="start-btn" onclick="startGame()">¡Iniciar Aventura!</button>
+    <button class="start-btn" onclick="startGame()">¡EMPEZAR A JUGAR!</button>
   </div>
 
-  <!-- CONTENEDOR DEL JUEGO -->
-  <div id="game-container">
-    <button id="surprise-btn" class="hidden" onclick="triggerSurprise()">🎁 ¡VER LA SORPRESA FINAL! 🎁</button>
-  </div>
-
-  <!-- JUKEBOX DE MÚSICA -->
-  <div class="music-player">
-    <span>🎵 <b>BTS Jukebox:</b></span>
+  <!-- BARRA PERMANENTE PARA CAMBIAR DE MÚSICA Y PANTALLA COMPLETA -->
+  <div id="music-player-bar" class="music-player-bar">
+    <label for="song-select">🎵 Reproductor BTS: </label>
     <select id="song-select" onchange="changeSong(this.value)">
-      <option value="BTS - Blood Sweat & Tears.mp3 ">1. BTS - Blood Sweat & Tears🧨</option>
-      <option value="BTS - Fake Love.mp3">2. BTS - Fake Love 🧈</option>
-      <option value="BTS - Pied Pier.mp3">3. BTS - Pied Pier 💗</option>
-      <option value="BTS - Please.mp3">4. BTS - Please 🌸</option>
-      <option value="Jimin - Like Crazy.mp3">5. Jimin - Like Crazy 🎶</option>
-      <option value="Jin - Heart on The Windows.mp3">6. Jin - Heart on The Windows 🎤</option>
-      <option value="JungKook - Yes or No.mp3">7. Jungkook - Sorpresa🐰💜</option>
+      <option value="BTS - Blood Sweat & Tears.mp3">🎵 Blood Sweat & Tears</option>
+      <option value="BTS - Fake Love.mp3">🎵 Fake Love</option>
+      <option value="BTS - Pied Pier.mp3">🎵 Pied Pier</option>
+      <option value="BTS - Please.mp3">🎵 Please</option>
+      <option value="Jimin - Like Crazy.mp3">🎵 Jimin - Like Crazy</option>
+      <option value="Jin - Heart on The Window.mp3">🎵 Jin - Heart on The Window</option>
+      <option value="JungKook - Yes or No.mp3">🎵 JungKook - Yes or No</option>
     </select>
+    <button id="fullscreen-btn" onclick="toggleFullscreen()">⛶ Pantalla Completa</button>
+  </div>
+
+  <!-- Contenedor del Juego -->
+  <div id="game-container"></div>
+
+  <!-- Botón Sorpresa Final -->
+  <button id="surprise-btn" class="surprise-btn hidden" onclick="triggerSurprise()">✨ Ver Sorpresa Especial ✨</button>
+
+  <!-- BOTONES TÁCTILES PARA CELULAR -->
+  <div id="touch-controls">
+    <div class="left-controls">
+      <button id="btn-left" class="touch-btn">◀</button>
+      <button id="btn-right" class="touch-btn">▶</button>
+    </div>
+    <div class="right-controls">
+      <button id="btn-jump" class="touch-btn jump-btn">▲ SALTAR</button>
+    </div>
   </div>
 
   <audio id="bg-music" loop></audio>
