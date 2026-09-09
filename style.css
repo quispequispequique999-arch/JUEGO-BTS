@@ -1,155 +1,159 @@
-* {
-  box-sizing: border-box;
-}
-
 body {
   margin: 0;
   padding: 0;
-  background-color: #0d001a;
+  background-color: #0b001a;
   color: #ffffff;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  overflow: hidden;
+  font-family: Arial, sans-serif;
+  text-align: center;
 }
 
-.custom-panel {
-  position: absolute;
-  z-index: 100;
-  background: rgba(26, 0, 44, 0.98);
+#game-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px auto;
+}
+
+canvas {
   border: 3px solid #8A2BE2;
-  border-radius: 16px;
-  padding: 25px;
-  text-align: center;
-  box-shadow: 0 0 30px #8A2BE2;
-  width: 380px;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(138, 43, 226, 0.5);
+  max-width: 100%;
+  height: auto;
+}
+
+.avatar-panel {
+  background: #1a0033;
+  border: 2px solid #8A2BE2;
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 400px;
+  margin: 20px auto;
+  box-shadow: 0 0 15px rgba(138, 43, 226, 0.4);
+}
+
+.avatar-panel.hidden {
+  display: none;
 }
 
 .outfit-btn {
-  background: #8A2BE2;
   color: white;
-  border: 2px solid transparent;
-  padding: 8px 14px;
-  margin: 4px;
+  border: none;
+  padding: 10px 15px;
+  margin: 5px;
   border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
 }
 
 .outfit-btn.selected {
-  border-color: #FFD700;
-  box-shadow: 0 0 10px #FFD700;
+  border: 2px solid #FFD700;
+  box-shadow: 0 0 8px #FFD700;
 }
 
-#start-btn {
-  font-size: 1em;
-  padding: 10px 20px;
-  cursor: pointer;
-  background: #a040ff;
+.start-btn {
+  background-color: #8A2BE2;
   color: white;
   border: none;
-  border-radius: 10px;
-  font-weight: bold;
-}
-
-#game-container {
-  position: relative;
-  width: 800px;
-  height: 500px;
-  border: 3px solid #8A2BE2;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 0 25px rgba(138, 43, 226, 0.5);
-}
-
-#surprise-btn {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  z-index: 50;
-  background: linear-gradient(45deg, #FFD700, #FF69B4);
-  color: #000;
-  font-weight: bold;
-  font-size: 13px;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 20px;
+  padding: 12px 20px;
+  border-radius: 8px;
   cursor: pointer;
-  box-shadow: 0 0 15px #FFD700;
+  font-weight: bold;
+  width: 90%;
+  margin-top: 15px;
+  font-size: 16px;
+  box-shadow: 0 4px 10px rgba(138, 43, 226, 0.5);
 }
 
-.music-player {
-  margin-top: 12px;
-  background: #1a002c;
-  padding: 8px 18px;
-  border-radius: 20px;
-  border: 1px solid #8A2BE2;
+/* --- BARRA DE MÚSICA PERMANENTE --- */
+.music-player-bar {
+  background: #1a0033;
+  border: 2px solid #8A2BE2;
+  border-radius: 10px;
+  padding: 10px 15px;
+  max-width: 450px;
+  margin: 15px auto 10px auto;
+  box-shadow: 0 0 12px rgba(138, 43, 226, 0.6);
   display: flex;
   align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-weight: bold;
+  color: #FFD700;
+}
+
+select {
+  padding: 8px 12px;
+  border-radius: 8px;
+  background-color: #2b004f;
+  color: #FFD700;
+  border: 2px solid #8A2BE2;
+  font-weight: bold;
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(138, 43, 226, 0.6);
+}
+
+select option {
+  background-color: #1a0033;
+  color: #ffffff;
+}
+
+.surprise-btn {
+  background-color: #FF1493;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  font-size: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  margin: 15px auto;
+}
+
+.surprise-btn.hidden {
+  display: none;
+}
+
+/* --- BOTONES TÁCTILES PARA CELULAR --- */
+#touch-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 800px;
+  margin: 10px auto;
+  padding: 0 15px;
+  box-sizing: border-box;
+}
+
+.left-controls, .right-controls {
+  display: flex;
   gap: 10px;
 }
 
-.music-player select {
-  background: #0d001a;
-  color: #FFD700;
-  border: 1px solid #8A2BE2;
-  padding: 5px 10px;
-  border-radius: 5px;
+.touch-btn {
+  background-color: #5c0099;
+  color: white;
+  border: 2px solid #8A2BE2;
+  border-radius: 12px;
+  padding: 15px 22px;
+  font-size: 20px;
   font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+  touch-action: manipulation;
+  user-select: none;
 }
 
-/* CELEBRACIÓN DE CUMPLEAÑOS Y GLOBOS */
-.birthday-overlay {
-  position: absolute;
-  top: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 40;
-  text-align: center;
-  pointer-events: none;
-  animation: popIn 0.8s ease-out;
+.touch-btn:active {
+  background-color: #8A2BE2;
+  transform: scale(0.95);
 }
 
-.birthday-title {
-  font-size: 2em;
-  font-weight: 900;
-  color: #FFD700;
-  text-shadow: 0 0 10px #FF69B4, 0 0 20px #8A2BE2;
-  margin: 0;
-}
-
-.birthday-cake {
-  font-size: 2.5em;
-  animation: bounce 1s infinite alternate;
-}
-
-.balloon {
-  position: absolute;
-  bottom: -50px;
-  font-size: 2em;
-  z-index: 30;
-  pointer-events: none;
-  animation: floatUp 4s linear forwards;
-}
-
-@keyframes popIn {
-  0% { transform: translateX(-50%) scale(0); }
-  100% { transform: translateX(-50%) scale(1); }
-}
-
-@keyframes bounce {
-  from { transform: translateY(0); }
-  to { transform: translateY(-10px); }
-}
-
-@keyframes floatUp {
-  0% { transform: translateY(0); opacity: 1; }
-  100% { transform: translateY(-520px); opacity: 0; }
-}
-
-.hidden {
-  display: none !important;
+.jump-btn {
+  background-color: #8A2BE2;
+  border-color: #FFD700;
+  padding: 15px 25px;
 }
